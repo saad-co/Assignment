@@ -1,3 +1,89 @@
+#include <stdio.h>
+#define size 20
+#include <stdbool.h>
+struct PATIENT
+{
+    char name[size];
+    int id;
+    int cnic;
+    int ph_no;
+    char disease[size];
+    int is_addmitted;
+};
+typedef struct PATIENT pat;
+
+void add_patient(pat *p)
+{
+    FILE *ptr;
+    ptr = fopen("patient_record.txt", "a");
+    if (ptr == NULL)
+    {
+        ptr = fopen("patient_record.txt", "w");
+    }
+    if (ptr == NULL)
+    {
+        printf("\nencountered error while opening the file");
+    }
+    else
+    {
+        printf("\nENTER THE NAME OF THE PATIENT:");
+        fflush(stdin);
+        gets(p->name);
+        fflush(stdin);
+        printf("\nenter the id:");
+        scanf("%d", &p->id);
+        fflush(stdin);
+        printf("\nEnter the disease of the patient: ");
+        gets(p->disease);
+        fflush(stdin);
+        printf("\nEnter the cnic of the user:");
+        scanf("%d", &p->cnic);
+        fflush(stdin);
+        printf("\nEnter the phone number:");
+        scanf("%d", &p->ph_no);
+        fflush(stdin);
+        printf("\nenter the status of the patient (1 OR 0?):");
+        scanf("%d", &p->is_addmitted);
+        fflush(stdin);
+        fwrite(p, sizeof(pat), 1, ptr);
+        fclose(ptr);
+        printf("Record has been wriiten\n");
+        printf("\n\n----------------------------------------------------\n\n");
+    }
+}
+
+void display(pat *p)
+{
+
+    FILE *ptr;
+    ptr = fopen("patient_record.txt", "r");
+    if (ptr == NULL)
+    {
+        printf("error while opening the file");
+    }
+    else
+    {
+        while (fread(p, sizeof(pat), 1, ptr))
+        {
+            printf("Name : %s\n", p->name);
+            printf("ID: %d\n", p->id);
+            printf("DISEASE: %s\n", p->disease);
+            printf("CNIC: %d\n", p->cnic);
+            printf("PHONE NUMBER: %d\n", p->ph_no);
+            printf("ADDMIT STATUS: %d",p->is_addmitted);
+            if (p->is_addmitted)
+            {
+                printf("PATIENT IS ADMITTED\n");
+            }
+            else
+            {
+                printf("PATIENT IS NOT ADMITTED\n");
+            }
+            printf("\n\n----------------------------------------------------\n\n");
+        }
+        fclose(ptr);
+    }
+}
 void search_patient(pat *p)
 {
     FILE *ptr;
